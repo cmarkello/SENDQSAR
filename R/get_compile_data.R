@@ -95,8 +95,7 @@ get_compile_data <- function(studyid = NULL,
   data.table::setDF(dm)
   return(dm)
 
-  } else if (fake_study == TRUE && use_xpt_file == TRUE) {
-    browser()
+  } else if (fake_study == TRUE && use_xpt_file == TRUE)
   # get the required domain
     dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
     ts <- haven::read_xpt(fs::path(path,'ts.xpt'))

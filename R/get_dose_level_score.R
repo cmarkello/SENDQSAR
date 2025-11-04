@@ -5,7 +5,6 @@ get_dose_level_score <- function(studyid ,
                                  use_xpt_file = FALSE,
                                  master_compiledata = NULL) {
 
-  browser()
   # Get the SETCD from 'get_treatment_group_amin' function
   # Treatment group is free from TK animals and recovery animals---------------
   ## ??? Is it possible that, lowest value meaning vehicle can be removed?????????????????????
