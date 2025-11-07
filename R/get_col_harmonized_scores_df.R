@@ -29,14 +29,6 @@
 #' }
 #'
 #' @export
-get_col_harmonized_scores_df <- function(liver_score_data_frame, Round = FALSE) {
-  # Function implementation here...
-}
-
-
-
-
-
 get_col_harmonized_scores_df <- function(liver_score_data_frame,
                                          Round = FALSE){
 
