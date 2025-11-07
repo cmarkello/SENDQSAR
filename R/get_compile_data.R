@@ -53,17 +53,9 @@ get_compile_data <- function(studyid = NULL,
 
   if(fake_study == TRUE && use_xpt_file == FALSE){
 
-    # Establish a connection to the SQLite database
-    db_connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
-
-    # Fetch data for the 'dm' domain
-    dm <- fetch_domain_data(db_connection, 'dm', studyid)
-
-    # Fetch data for the 'ts' domain
-    ts <- fetch_domain_data(db_connection, 'ts', studyid)
-
-    # Close the database connection
-    DBI::dbDisconnect(db_connection)
+    # get the required domain
+    dm <- read.csv(fs::path(path,'dm.csv'))
+    ts <- read.csv(fs::path(path,'ts.csv'))
 
     # Convert 'dm' object to data.table
     data.table::setDT(dm)
@@ -145,21 +137,15 @@ get_compile_data <- function(studyid = NULL,
 
   } else if(fake_study == FALSE && use_xpt_file == FALSE) {
 
-    # Establish a connection to the SQLite database
-    db_connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
-
-    #Pull relevant domain data for each domain
-    bw <- fetch_domain_data(db_connection, 'bw', studyid)
-    dm <- fetch_domain_data(db_connection, 'dm', studyid)
-    ds <- fetch_domain_data(db_connection, 'ds', studyid)
-    ts <- fetch_domain_data(db_connection, 'ts', studyid)
-    tx <- fetch_domain_data(db_connection, 'tx', studyid)
-    pc <- fetch_domain_data(db_connection, 'pc', studyid)
-    # pp <- fetch_domain_data(db_connection, 'pp', studyid)
-    # pooldef <- fetch_domain_data(db_connection, 'pooldef', studyid)
-
-    # Close the database connection
-    DBI::dbDisconnect(db_connection)
+    # get the required domain
+    bw <- read.csv(fs::path(path,'bw.csv'))
+    dm <- read.csv(fs::path(path,'dm.csv'))
+    ds <- read.csv(fs::path(path,'ds.csv'))
+    ts <- read.csv(fs::path(path,'ts.csv'))
+    tx <- read.csv(fs::path(path,'tx.csv'))
+    pc <- read.csv(fs::path(path,'pc.csv'))
+    # pp <- read.csv(fs::path(path,'pp.csv'))
+    # pooldef <- read.csv(fs::path(path,'pooldef.csv'))
 
 
   } else if (fake_study == FALSE && use_xpt_file == TRUE) {
