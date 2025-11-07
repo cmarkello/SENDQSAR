@@ -165,10 +165,12 @@ for (studyid in studyid_or_studyids ){
      # if use_xpt_file = TRUE,studyid should be NULL..........................
     # Call "get_liver_compiledata" function to get the master_compiledata
 
+    print("DEBUG: FLAG 7")
     output_get_compile_data <- get_compile_data(studyid = studyid ,
                                                 path_db = path_db, # problem is here
                                                 fake_study = fake_study,
                                                 use_xpt_file = use_xpt_file)
+    print("DEBUG: FLAG 8")
 
     #return as.data.frame "master_compiledata"
     #master_compiledata
