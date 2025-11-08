@@ -297,7 +297,7 @@ if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
 
     if (is.null(master_compiledata)) {
 
-      studyid <-  NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
       master_compiledata <- get_compile_data(studyid = studyid,
                                              path_db = path_db,

@@ -151,7 +151,7 @@ for (studyid in studyid_or_studyids ){
   tryCatch({
 
     # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-    studyid <- NULL
+    studyid <- if (use_xpt_file) NULL else studyid
 
      # if use_xpt_file = TRUE,studyid should be NULL..........................
     # Call "get_liver_compiledata" function to get the master_compiledata
@@ -266,7 +266,7 @@ for (studyid in studyid_or_studyids ){
 
     if(output_individual_scores){
      # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-      studyid <- NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
     bwzscore_BW <- get_bw_score(studyid = studyid,
                                  path_db = path_db,
@@ -282,7 +282,7 @@ for (studyid in studyid_or_studyids ){
     } else if (output_zscore_by_USUBJID) {
 
       # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-      studyid <- NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
       BW_zscore_by_USUBJID_HD <-get_bw_score(studyid = studyid,
                                              path_db = path_db,
@@ -297,7 +297,7 @@ for (studyid in studyid_or_studyids ){
     } else {
 
       # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-      studyid <- NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
       #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       # need to think more and make acccordingly~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -358,7 +358,7 @@ for (studyid in studyid_or_studyids ){
 
 
     # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-    studyid <- NULL
+    studyid <- if (use_xpt_file) NULL else studyid
 
     if(output_individual_scores){
       # when, output_individual_scores == TRUE
@@ -379,7 +379,7 @@ for (studyid in studyid_or_studyids ){
     } else if (output_zscore_by_USUBJID) {
 
       # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-      studyid <- NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
       bwzscore_BW <- get_bw_score(studyid = studyid,
                                    path_db = path_db,
@@ -410,7 +410,7 @@ for (studyid in studyid_or_studyids ){
       } else {
 
       # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-      studyid <- NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
 
        # if (is.null(bwzscore_BW)) {
@@ -482,7 +482,7 @@ for (studyid in studyid_or_studyids ){
   #<><><><><><><><><><><><><><><><><><>"""LB"""" zscoring <><><><><><><><><><><>
   tryCatch({
     # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-    studyid <- NULL
+    studyid <- if (use_xpt_file) NULL else studyid
 
     if(output_individual_scores){
     master_lb_scores <- get_lb_score(studyid = studyid,
@@ -499,7 +499,7 @@ for (studyid in studyid_or_studyids ){
     } else if (output_zscore_by_USUBJID) {
 
       # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-      studyid <- NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
       LB_zscore_by_USUBJID_HD <- get_lb_score(studyid = studyid,
                                               path_db = path_db,
@@ -517,7 +517,7 @@ for (studyid in studyid_or_studyids ){
 
       } else {
       # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-      studyid <- NULL
+      studyid <- if (use_xpt_file) NULL else studyid
 
       averaged_LB_score <- get_lb_score(studyid = studyid,
                                         path_db = path_db,
@@ -573,7 +573,7 @@ for (studyid in studyid_or_studyids ){
    if(output_individual_scores ){
 
      # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-     studyid <- NULL
+     studyid <- if (use_xpt_file) NULL else studyid
 
      mi_score_final_list_df <- get_mi_score(studyid = studyid,
                                             path_db = path_db,
@@ -592,7 +592,7 @@ for (studyid in studyid_or_studyids ){
 
 
      # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-     studyid <- NULL
+     studyid <- if (use_xpt_file) NULL else studyid
 
      MI_score_by_USUBJID_HD <-get_mi_score(studyid = studyid,
                                            path_db = path_db,
@@ -613,7 +613,7 @@ for (studyid in studyid_or_studyids ){
    } else{
 
      # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-     studyid <- NULL
+     studyid <- if (use_xpt_file) NULL else studyid
 
      averaged_MI_score <- get_mi_score(studyid = studyid,
                                        path_db = path_db,

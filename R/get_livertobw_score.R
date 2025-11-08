@@ -101,7 +101,7 @@ get_livertobw_score <- function (studyid = NULL,
     #..................................................................
 
   if (is.null(master_compiledata)) {
-    studyid <- NULL
+    studyid <- if (use_xpt_file) NULL else studyid
     master_compiledata <- get_compile_data(studyid = studyid,
                                            path_db = path_db,
                                            fake_study = fake_study,
@@ -115,7 +115,7 @@ get_livertobw_score <- function (studyid = NULL,
   # Check if bwzscore_BW is NULL
   if (is.null(bwzscore_BW)) {
 
-    studyid <- NULL
+    studyid <- if (use_xpt_file) NULL else studyid
 
     bwzscore_BW <-  get_bw_score (studyid = studyid ,
                                   path_db = path_db,
