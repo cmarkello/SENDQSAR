@@ -56,6 +56,7 @@ get_compile_data <- function(studyid = NULL,
     # get the required domain
     dm <- read.csv(fs::path(path,'dm.csv'))
     print("DEBUG csv dm:")
+    print(fs::path(path,'dm.csv'))
     dm
     ts <- read.csv(fs::path(path,'ts.csv'))
 
