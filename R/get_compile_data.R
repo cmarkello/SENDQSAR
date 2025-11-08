@@ -63,15 +63,14 @@ get_compile_data <- function(studyid = NULL,
     # Convert 'ts' object to data.table
     data.table::setDT(ts)
 
+  # Select specific columns from dm
+  dm <- dm[,c('STUDYID','USUBJID','SEX','ARMCD','ARM','SETCD')]
+
   # Fetch species value from ts table where TSPARMCD equals 'SPECIES
   species <- ts$TSVAL[which(ts$TSPARMCD=='SPECIES')]
 
-  # Select specific columns from dm
-  dm <- dm[,c('STUDYID','USUBJID','SPECIES','SEX','ARMCD','ARM','SETCD')]
-
   # Assuming dm is already defined as a data frame or tibble
   dm <- dm %>%
-  dplyr::mutate(Species = SPECIES) %>%   # Add or update the Species column
   dplyr::select(-SPECIES, -ARMCD) %>%  # Remove  ARMCD
   dplyr::rename(ARMCD = ARM)  %>%   # Rename ARM to ARMCD (if ARMCD is needed)
   dplyr::select("STUDYID", "USUBJID", "Species","SEX", "ARMCD","SETCD")
