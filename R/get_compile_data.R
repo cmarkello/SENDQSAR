@@ -55,7 +55,8 @@ get_compile_data <- function(studyid = NULL,
 
     # get the required domain
     dm <- read.csv(fs::path(path,'dm.csv'))
-    print("DEBUG csv dm: ", dm)
+    print("DEBUG csv dm:")
+    dm
     ts <- read.csv(fs::path(path,'ts.csv'))
 
     # Convert 'dm' object to data.table
@@ -90,7 +91,8 @@ get_compile_data <- function(studyid = NULL,
   } else if (fake_study == TRUE && use_xpt_file == TRUE) {
   # get the required domain
     dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
-    print("DEBUG xpt dm: ", dm)
+    print("DEBUG xpt dm: ")
+    dm
     ts <- haven::read_xpt(fs::path(path,'ts.xpt'))
 
     # Convert 'dm' object to data.table
