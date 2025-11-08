@@ -139,13 +139,10 @@ if(output_individual_scores ) {
 for (studyid in studyid_or_studyids ){
   print(studyid)
 
-  #if( multiple_xpt_folder == TRUE) {
-  if(use_xpt_file == TRUE) {
 
-    path_db <- studyid # giving the path of the xpt folder
+    path_db <- studyid # giving the path of the xpt OR csv folder
 
     print(path_db)
-   }
 
   # Initialize a flag variable at the start of each iteration
   first_block_success <- TRUE
