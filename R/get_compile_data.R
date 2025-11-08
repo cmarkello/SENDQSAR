@@ -57,7 +57,9 @@ get_compile_data <- function(studyid = NULL,
     dm <- read.csv(fs::path(path,'dm.csv'))
     print("DEBUG csv dm:")
     print(fs::path(path,'dm.csv'))
+    browser()
     dm
+
     ts <- read.csv(fs::path(path,'ts.csv'))
 
     # Convert 'dm' object to data.table
