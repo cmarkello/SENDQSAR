@@ -151,7 +151,7 @@ for (studyid in studyid_or_studyids ){
   tryCatch({
 
     # Set 'studyid' to NULL if using an XPT file, otherwise keep the original value.
-    studyid <- if (use_xpt_file) NULL else studyid
+    #studyid <- if (use_xpt_file) NULL else studyid
 
      # if use_xpt_file = TRUE,studyid should be NULL..........................
     # Call "get_liver_compiledata" function to get the master_compiledata
