@@ -55,14 +55,8 @@ get_lb_score <- function(studyid = NULL,
     # Read data from .xpt files
     lb <- haven::read_xpt(fs::path(path, 'lb.xpt'))
   } else {
-    # Establish a connection to the SQLite database
-    db_connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
-
-    # Fetch data for required domains
-    lb <- fetch_domain_data(db_connection, 'lb', studyid)
-
-    # Close the database connection
-    DBI::dbDisconnect(db_connection)
+    # Read data from .csv files
+    lb <- read.csv(fs::path(path, 'lb.csv'))
   }
 
   # Print the dimension of the data frames
@@ -186,7 +180,7 @@ get_lb_score <- function(studyid = NULL,
 
     if (is.null(master_compiledata)) {
 
-      studyid <- if (use_xpt_file) NULL else studyid
+      studyid <- NULL
 
       master_compiledata <- get_compile_data(studyid = studyid,
                                              path_db = path_db,

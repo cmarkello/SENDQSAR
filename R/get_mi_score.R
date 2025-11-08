@@ -58,16 +58,10 @@ if (use_xpt_file) {
   dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
 
 } else {
-  # Establish a connection to the SQLite database
-  db_connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
+  # Read data from .csv files
+  mi <- read.csv(fs::path(path, 'mi.csv'))
 
-  # Fetch data for required domains
-  mi <- fetch_domain_data(db_connection, 'mi', studyid)
-
-  dm <- fetch_domain_data(db_connection, 'dm', studyid)
-
-  # Close the database connection
-  DBI::dbDisconnect(db_connection)
+  dm <- read.csv(fs::path(path,'dm.csv'))
 }
 
 # Print the dimension of the data frames
@@ -179,7 +173,7 @@ cat("The dimension of 'dm' domain is:", dim(dm), "\n")
 
     if (is.null(master_compiledata)) {
 
-      studyid <- if (use_xpt_file) NULL else studyid
+      studyid <- NULL
 
       master_compiledata <- get_compile_data(studyid = studyid,
                                              path_db = path_db,

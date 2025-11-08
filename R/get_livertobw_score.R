@@ -82,14 +82,8 @@ get_livertobw_score <- function (studyid = NULL,
     # Read data from .xpt files
     om <- haven::read_xpt(fs::path(path, 'om.xpt'))
   } else {
-    # Establish a connection to the SQLite database
-    db_connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
-
-    # Fetch data for required domains
-    om <- fetch_domain_data(db_connection, 'om', studyid)
-
-    # Close the database connection
-    DBI::dbDisconnect(db_connection)
+    # Read data from .xpt files
+    om <- read.csv(fs::path(path, 'om.csv'))
   }
 
   # Print the dimension of the data frames
@@ -107,7 +101,7 @@ get_livertobw_score <- function (studyid = NULL,
     #..................................................................
 
   if (is.null(master_compiledata)) {
-    studyid <- if (use_xpt_file) NULL else studyid
+    studyid <- NULL
     master_compiledata <- get_compile_data(studyid = studyid,
                                            path_db = path_db,
                                            fake_study = fake_study,
@@ -121,7 +115,7 @@ get_livertobw_score <- function (studyid = NULL,
   # Check if bwzscore_BW is NULL
   if (is.null(bwzscore_BW)) {
 
-    studyid <- if (use_xpt_file) NULL else studyid
+    studyid <- NULL
 
     bwzscore_BW <-  get_bw_score (studyid = studyid ,
                                   path_db = path_db,

@@ -68,14 +68,8 @@ get_bw_score <- function(studyid = NULL,
     # Read data from .xpt files
     bw <- haven::read_xpt(fs::path(path, 'bw.xpt'))
   } else {
-    # Establish a connection to the SQLite database
-    db_connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
-
-    # Fetch data for required domains
-    bw <- fetch_domain_data(db_connection, 'bw', studyid)
-
-    # Close the database connection
-    DBI::dbDisconnect(db_connection)
+    # Read data from .csv files
+    bw <- read.csv(fs::path(path, 'bw.csv'))
   }
 
   # Print the dimension of the data frames
@@ -303,7 +297,7 @@ if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
 
     if (is.null(master_compiledata)) {
 
-      studyid <- if (use_xpt_file) NULL else studyid
+      studyid <-  NULL
 
       master_compiledata <- get_compile_data(studyid = studyid,
                                              path_db = path_db,
