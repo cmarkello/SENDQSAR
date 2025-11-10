@@ -85,6 +85,8 @@ get_livertobw_score <- function (studyid = NULL,
     # Read data from .xpt files
     om <- read.csv(fs::path(path, 'om.csv'))[,-1]
     om[is.na(om)] <- ''
+    om <- mutate(om, STUDYID = as.character(STUDYID))
+    om <- mutate(om, OMSTRESN = as.numeric(OMSTRESN))
   }
 
   # Print the dimension of the data frames

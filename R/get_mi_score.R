@@ -61,9 +61,11 @@ if (use_xpt_file) {
   # Read data from .csv files
   mi <- read.csv(fs::path(path, 'mi.csv'))[,-1]
   mi[is.na(mi)] <- ''
+  mi <- mutate(mi, STUDYID = as.character(STUDYID))
 
   dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
   dm[is.na(dm)] <- ''
+  dm <- mutate(dm, STUDYID = as.character(STUDYID))
 }
 
 # Print the dimension of the data frames

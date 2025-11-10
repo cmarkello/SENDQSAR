@@ -58,6 +58,8 @@ get_lb_score <- function(studyid = NULL,
     # Read data from .csv files
     lb <- read.csv(fs::path(path, 'lb.csv'))[,-1]
     lb[is.na(lb)] <- ''
+    lb <- mutate(lb, STUDYID = as.character(STUDYID))
+    lb <- mutate(lb, LBSTRESN= as.numeric(LBSTRESN))
   }
 
   # Print the dimension of the data frames

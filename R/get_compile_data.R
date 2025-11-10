@@ -56,9 +56,11 @@ get_compile_data <- function(studyid = NULL,
     # get the required domain
     dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
     dm[is.na(dm)] <- ''
+    dm <- mutate(dm, STUDYID = as.character(STUDYID))
 
     ts <- read.csv(fs::path(path,'ts.csv'))[,-1]
     ts[is.na(ts)] <- ''
+    ts <- mutate(ts, STUDYID = as.character(STUDYID))
 
     # Convert 'dm' object to data.table
     data.table::setDT(dm)
@@ -146,20 +148,28 @@ get_compile_data <- function(studyid = NULL,
     # get the required domain
     bw <- read.csv(fs::path(path,'bw.csv'))[,-1]
     bw[is.na(bw)] <- ''
+    bw <- mutate(bw, STUDYID = as.character(STUDYID))
     dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
     dm[is.na(dm)] <- ''
+    dm <- mutate(dm, STUDYID = as.character(STUDYID))
     ds <- read.csv(fs::path(path,'ds.csv'))[,-1]
     ds[is.na(ds)] <- ''
+    ds <- mutate(ds, STUDYID = as.character(STUDYID))
     ts <- read.csv(fs::path(path,'ts.csv'))[,-1]
     ts[is.na(ts)] <- ''
+    ts <- mutate(ts, STUDYID = as.character(STUDYID))
     tx <- read.csv(fs::path(path,'tx.csv'))[,-1]
     tx[is.na(tx)] <- ''
+    tx <- mutate(tx, STUDYID = as.character(STUDYID))
     pc <- read.csv(fs::path(path,'pc.csv'))[,-1]
     pc[is.na(pc)] <- ''
+    pc <- mutate(pc, STUDYID = as.character(STUDYID))
     # pp <- read.csv(fs::path(path,'pp.csv'))[,-1]
     # pp[is.na(pp)] <- ''
+    # pp <- mutate(pp, STUDYID = as.character(STUDYID))
     # pooldef <- read.csv(fs::path(path,'pooldef.csv'))[,-1]
     # pooldef[is.na(pooldef)] <- ''
+    # pooldef <- mutate(pooldef, STUDYID = as.character(STUDYID))
 
 
   } else if (fake_study == FALSE && use_xpt_file == TRUE) {
