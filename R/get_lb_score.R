@@ -56,7 +56,8 @@ get_lb_score <- function(studyid = NULL,
     lb <- haven::read_xpt(fs::path(path, 'lb.xpt'))
   } else {
     # Read data from .csv files
-    lb <- read.csv(fs::path(path, 'lb.csv'))
+    lb <- read.csv(fs::path(path, 'lb.csv'))[,-1]
+    lb[is.na(lb)] <- ''
   }
 
   # Print the dimension of the data frames

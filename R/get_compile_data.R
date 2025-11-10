@@ -54,13 +54,11 @@ get_compile_data <- function(studyid = NULL,
   if(fake_study == TRUE && use_xpt_file == FALSE){
 
     # get the required domain
-    dm <- read.csv(fs::path(path,'dm.csv'))
-    print("DEBUG csv dm:")
-    print(fs::path(path,'dm.csv'))
-    browser()
-    dm
+    dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
+    dm[is.na(dm)] <- ''
 
-    ts <- read.csv(fs::path(path,'ts.csv'))
+    ts <- read.csv(fs::path(path,'ts.csv'))[,-1]
+    ts[is.na(ts)] <- ''
 
     # Convert 'dm' object to data.table
     data.table::setDT(dm)
@@ -68,15 +66,17 @@ get_compile_data <- function(studyid = NULL,
     # Convert 'ts' object to data.table
     data.table::setDT(ts)
 
-  # Select specific columns from dm
-  dm <- dm[,c('STUDYID','USUBJID','SEX','ARMCD','ARM','SETCD')]
-
   # Fetch species value from ts table where TSPARMCD equals 'SPECIES
   species <- ts$TSVAL[which(ts$TSPARMCD=='SPECIES')]
 
+  # Select specific columns from dm
+  dm <- dm[,c('STUDYID','USUBJID','SEX','ARMCD','ARM','SETCD')]
+
+  dm$Species <- species
+
   # Assuming dm is already defined as a data frame or tibble
   dm <- dm %>%
-  dplyr::select(-SPECIES, -ARMCD) %>%  # Remove  ARMCD
+  dplyr::select(-ARMCD) %>%  # Remove  ARMCD
   dplyr::rename(ARMCD = ARM)  %>%   # Rename ARM to ARMCD (if ARMCD is needed)
   dplyr::select("STUDYID", "USUBJID", "Species","SEX", "ARMCD","SETCD")
 
@@ -144,14 +144,22 @@ get_compile_data <- function(studyid = NULL,
   } else if(fake_study == FALSE && use_xpt_file == FALSE) {
 
     # get the required domain
-    bw <- read.csv(fs::path(path,'bw.csv'))
-    dm <- read.csv(fs::path(path,'dm.csv'))
-    ds <- read.csv(fs::path(path,'ds.csv'))
-    ts <- read.csv(fs::path(path,'ts.csv'))
-    tx <- read.csv(fs::path(path,'tx.csv'))
-    pc <- read.csv(fs::path(path,'pc.csv'))
-    # pp <- read.csv(fs::path(path,'pp.csv'))
-    # pooldef <- read.csv(fs::path(path,'pooldef.csv'))
+    bw <- read.csv(fs::path(path,'bw.csv'))[,-1]
+    bw[is.na(bw)] <- ''
+    dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
+    dm[is.na(dm)] <- ''
+    ds <- read.csv(fs::path(path,'ds.csv'))[,-1]
+    ds[is.na(ds)] <- ''
+    ts <- read.csv(fs::path(path,'ts.csv'))[,-1]
+    ts[is.na(ts)] <- ''
+    tx <- read.csv(fs::path(path,'tx.csv'))[,-1]
+    tx[is.na(tx)] <- ''
+    pc <- read.csv(fs::path(path,'pc.csv'))[,-1]
+    pc[is.na(pc)] <- ''
+    # pp <- read.csv(fs::path(path,'pp.csv'))[,-1]
+    # pp[is.na(pp)] <- ''
+    # pooldef <- read.csv(fs::path(path,'pooldef.csv'))[,-1]
+    # pooldef[is.na(pooldef)] <- ''
 
 
   } else if (fake_study == FALSE && use_xpt_file == TRUE) {

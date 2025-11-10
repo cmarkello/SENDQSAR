@@ -83,7 +83,8 @@ get_livertobw_score <- function (studyid = NULL,
     om <- haven::read_xpt(fs::path(path, 'om.xpt'))
   } else {
     # Read data from .xpt files
-    om <- read.csv(fs::path(path, 'om.csv'))
+    om <- read.csv(fs::path(path, 'om.csv'))[,-1]
+    om[is.na(om)] <- ''
   }
 
   # Print the dimension of the data frames

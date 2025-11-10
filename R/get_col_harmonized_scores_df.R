@@ -35,6 +35,9 @@ get_col_harmonized_scores_df <- function(liver_score_data_frame,
 
   ###-----------column harmonization of "liver_scores"-------------
   liver_scores <- liver_score_data_frame
+  print("DEBUG 15")
+  print(liver_scores)
+  print("DEBUG 16")
   # Replace spaces and commas in column names with dots
   colnames(liver_scores) <- gsub(' ', '.', colnames(liver_scores))
   colnames(liver_scores) <- gsub(',', '.', colnames(liver_scores))
