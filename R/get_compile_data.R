@@ -51,16 +51,26 @@ get_compile_data <- function(studyid = NULL,
     query_result
   }
 
+  get_csv_data <- function(csv_path, pattern) {
+    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_df <- read.csv(fs::path(csv_path, csv_filename))
+    empty_name_cols <- which(colnames(csv_df) == "X")
+    if (length(empty_name_cols) > 0) {
+      csv_df <- csv_df[, -empty_name_cols]
+    } else {
+      csv_df <- csv_df # No empty named columns to remove
+    }
+    csv_df[is.na(csv_df)] <- ''
+    csv_df <- mutate(csv_df, STUDYID = as.character(STUDYID))
+    csv_df
+  }
+
   if(fake_study == TRUE && use_xpt_file == FALSE){
 
     # get the required domain
-    dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
-    dm[is.na(dm)] <- ''
-    dm <- mutate(dm, STUDYID = as.character(STUDYID))
+    dm <- get_csv_data(path, 'dm\\.csv')
 
-    ts <- read.csv(fs::path(path,'ts.csv'))[,-1]
-    ts[is.na(ts)] <- ''
-    ts <- mutate(ts, STUDYID = as.character(STUDYID))
+    ts <- get_csv_data(path,'ts\\.csv')
 
     # Convert 'dm' object to data.table
     data.table::setDT(dm)
@@ -82,9 +92,21 @@ get_compile_data <- function(studyid = NULL,
   dplyr::rename(ARMCD = ARM)  %>%   # Rename ARM to ARMCD (if ARMCD is needed)
   dplyr::select("STUDYID", "USUBJID", "Species","SEX", "ARMCD","SETCD")
 
+  # TODO: clean this up
   #  Update 'ARMCD' to 'vehicle' where it originally equals 'Control'
   dm <- dm %>%
-    dplyr::mutate(ARMCD = dplyr::if_else(ARMCD == 'Control', 'vehicle', ARMCD))
+    dplyr::mutate(ARMCD = dplyr::if_else(grepl('Control', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
+  dm <- dm %>%
+    dplyr::mutate(ARMCD = dplyr::if_else(grepl('G1A1', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
+
+  # TODO: clean this up
+  #  Update 'ARMCD' to 'HD' where it originally equals the high-dose exeriment label
+  dm <- dm %>%
+    dplyr::mutate(ARMCD = dplyr::if_else(grepl('Dose4', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
+  dm <- dm %>%
+    dplyr::mutate(ARMCD = dplyr::if_else(grepl('G4A1', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
+  dm <- dm %>%
+    dplyr::mutate(ARMCD = dplyr::if_else(grepl('High', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
 
   # Filter 'dm' to include only rows where 'ARMCD' is either 'vehicle' or 'HD'
   dm <- dm %>%
@@ -96,8 +118,6 @@ get_compile_data <- function(studyid = NULL,
   } else if (fake_study == TRUE && use_xpt_file == TRUE) {
   # get the required domain
     dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
-    print("DEBUG xpt dm: ")
-    dm
     ts <- haven::read_xpt(fs::path(path,'ts.xpt'))
 
     # Convert 'dm' object to data.table
@@ -128,9 +148,21 @@ get_compile_data <- function(studyid = NULL,
       dplyr::rename(ARMCD = ARM)  %>%   # Rename ARM to ARMCD (if ARMCD is needed)
       dplyr::select("STUDYID", "USUBJID", "Species","SEX", "ARMCD","SETCD")
 
+    # TODO: clean this up
     #  Update 'ARMCD' to 'vehicle' where it originally equals 'Control'
     dm <- dm %>%
-      dplyr::mutate(ARMCD = dplyr::if_else(ARMCD == 'Control', 'vehicle', ARMCD))
+      dplyr::mutate(ARMCD = dplyr::if_else(grepl('Control', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
+    dm <- dm %>%
+      dplyr::mutate(ARMCD = dplyr::if_else(grepl('G1A1', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
+
+    # TODO: clean this up
+    #  Update 'ARMCD' to 'HD' where it originally equals the high-dose exeriment label
+    dm <- dm %>%
+      dplyr::mutate(ARMCD = dplyr::if_else(grepl('Dose4', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
+    dm <- dm %>%
+      dplyr::mutate(ARMCD = dplyr::if_else(grepl('G4A1', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
+    dm <- dm %>%
+      dplyr::mutate(ARMCD = dplyr::if_else(grepl('High', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
 
     # Filter 'dm' to include only rows where 'ARMCD' is either 'vehicle' or 'HD'
     dm <- dm %>%
@@ -146,30 +178,14 @@ get_compile_data <- function(studyid = NULL,
   } else if(fake_study == FALSE && use_xpt_file == FALSE) {
 
     # get the required domain
-    bw <- read.csv(fs::path(path,'bw.csv'))[,-1]
-    bw[is.na(bw)] <- ''
-    bw <- mutate(bw, STUDYID = as.character(STUDYID))
-    dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
-    dm[is.na(dm)] <- ''
-    dm <- mutate(dm, STUDYID = as.character(STUDYID))
-    ds <- read.csv(fs::path(path,'ds.csv'))[,-1]
-    ds[is.na(ds)] <- ''
-    ds <- mutate(ds, STUDYID = as.character(STUDYID))
-    ts <- read.csv(fs::path(path,'ts.csv'))[,-1]
-    ts[is.na(ts)] <- ''
-    ts <- mutate(ts, STUDYID = as.character(STUDYID))
-    tx <- read.csv(fs::path(path,'tx.csv'))[,-1]
-    tx[is.na(tx)] <- ''
-    tx <- mutate(tx, STUDYID = as.character(STUDYID))
-    pc <- read.csv(fs::path(path,'pc.csv'))[,-1]
-    pc[is.na(pc)] <- ''
-    pc <- mutate(pc, STUDYID = as.character(STUDYID))
-    # pp <- read.csv(fs::path(path,'pp.csv'))[,-1]
-    # pp[is.na(pp)] <- ''
-    # pp <- mutate(pp, STUDYID = as.character(STUDYID))
-    # pooldef <- read.csv(fs::path(path,'pooldef.csv'))[,-1]
-    # pooldef[is.na(pooldef)] <- ''
-    # pooldef <- mutate(pooldef, STUDYID = as.character(STUDYID))
+    bw <- get_csv_data(path,'bw\\.csv')
+    dm <- get_csv_data(path,'dm\\.csv')
+    ds <- get_csv_data(path,'ds\\.csv')
+    ts <- get_csv_data(path,'ts\\.csv')
+    tx <- get_csv_data(path,'tx\\.csv')
+    pc <- get_csv_data(path,'pc\\.csv')
+    # pp <- get_csv_data(path,'pp\\.csv')
+    # pooldef <- get_csv_data(path,'pooldef\\.csv')
 
 
   } else if (fake_study == FALSE && use_xpt_file == TRUE) {

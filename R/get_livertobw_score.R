@@ -77,15 +77,27 @@ get_livertobw_score <- function (studyid = NULL,
     query_result
   }
 
+  get_csv_data <- function(csv_path, pattern) {
+    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_df <- read.csv(fs::path(csv_path, csv_filename))
+    empty_name_cols <- which(colnames(csv_df) == "X")
+    if (length(empty_name_cols) > 0) {
+      csv_df <- csv_df[, -empty_name_cols]
+    } else {
+      csv_df <- csv_df # No empty named columns to remove
+    }
+    csv_df[is.na(csv_df)] <- ''
+    csv_df <- mutate(csv_df, STUDYID = as.character(STUDYID))
+    csv_df
+  }
+
 
   if (use_xpt_file) {
     # Read data from .xpt files
     om <- haven::read_xpt(fs::path(path, 'om.xpt'))
   } else {
     # Read data from .xpt files
-    om <- read.csv(fs::path(path, 'om.csv'))[,-1]
-    om[is.na(om)] <- ''
-    om <- mutate(om, STUDYID = as.character(STUDYID))
+    om <- get_csv_data(path, 'om\\.csv')
     om <- mutate(om, OMSTRESN = as.numeric(OMSTRESN))
   }
 
@@ -194,7 +206,7 @@ get_livertobw_score <- function (studyid = NULL,
     dplyr::mutate(liverToBW_zscore = abs(liverToBW_zscore))
 
   # Filter and select specific columns
-    HD_liver_zscore <- liver_zscore_df %>%
+  HD_liver_zscore <- liver_zscore_df %>%
     dplyr::filter(ARMCD == "HD") %>%
     dplyr::select(STUDYID, USUBJID,  ARMCD, liverToBW_zscore)
 

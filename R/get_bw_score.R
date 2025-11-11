@@ -64,12 +64,26 @@ get_bw_score <- function(studyid = NULL,
     query_result
   }
 
+  get_csv_data <- function(csv_path, pattern) {
+    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_df <- read.csv(fs::path(csv_path, csv_filename))
+    empty_name_cols <- which(colnames(csv_df) == "X")
+    if (length(empty_name_cols) > 0) {
+      csv_df <- csv_df[, -empty_name_cols]
+    } else {
+      csv_df <- csv_df # No empty named columns to remove
+    }
+    csv_df[is.na(csv_df)] <- ''
+    csv_df <- mutate(csv_df, STUDYID = as.character(STUDYID))
+    csv_df
+  }
+
   if (use_xpt_file) {
     # Read data from .xpt files
     bw <- haven::read_xpt(fs::path(path, 'bw.xpt'))
   } else {
     # Read data from .csv files
-    bw <- read.csv(fs::path(path, 'bw.csv'))
+    bw <- get_csv_data(path, 'bw\\.csv')
   }
 
   # Print the dimension of the data frames

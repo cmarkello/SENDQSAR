@@ -156,12 +156,10 @@ for (studyid in studyid_or_studyids ){
      # if use_xpt_file = TRUE,studyid should be NULL..........................
     # Call "get_liver_compiledata" function to get the master_compiledata
 
-    print("DEBUG: FLAG 9")
     output_get_compile_data <- get_compile_data(studyid = studyid ,
                                                 path_db = path_db, # problem is here
                                                 fake_study = fake_study,
                                                 use_xpt_file = use_xpt_file)
-    print("DEBUG: FLAG 10")
 
     #return as.data.frame "master_compiledata"
     #master_compiledata
@@ -561,6 +559,8 @@ for (studyid in studyid_or_studyids ){
                                stringsAsFactors = FALSE)
     }
     master_error_df <<- rbind(master_error_df, error_block4)
+    ## DEBUG
+    ##write.csv(master_error_df, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/master_error_df.csv")
   })
 
   #<><><><><><><><><><><><><><><><><><>"""MI"""" zscoring <><><><><><><><><><><>

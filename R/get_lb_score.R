@@ -50,15 +50,27 @@ get_lb_score <- function(studyid = NULL,
     query_result
   }
 
+   get_csv_data <- function(csv_path, pattern) {
+    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_df <- read.csv(fs::path(csv_path, csv_filename))
+    empty_name_cols <- which(colnames(csv_df) == "X")
+    if (length(empty_name_cols) > 0) {
+      csv_df <- csv_df[, -empty_name_cols]
+    } else {
+      csv_df <- csv_df # No empty named columns to remove
+    }
+    csv_df[is.na(csv_df)] <- ''
+    csv_df <- mutate(csv_df, STUDYID = as.character(STUDYID))
+    csv_df
+  }
+
   # GET THE REQUIRED DOMAIN DATA
   if (use_xpt_file) {
     # Read data from .xpt files
     lb <- haven::read_xpt(fs::path(path, 'lb.xpt'))
   } else {
     # Read data from .csv files
-    lb <- read.csv(fs::path(path, 'lb.csv'))[,-1]
-    lb[is.na(lb)] <- ''
-    lb <- mutate(lb, STUDYID = as.character(STUDYID))
+    lb <- get_csv_data(path, 'lb\\.csv')
     lb <- mutate(lb, LBSTRESN= as.numeric(LBSTRESN))
   }
 

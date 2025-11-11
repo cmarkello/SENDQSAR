@@ -49,6 +49,19 @@ fetch_domain_data <- function(db_connection, domain_name, studyid) {
   query_result <- DBI::dbGetQuery(db_connection, statement = query_statement, params = list(x = studyid))
   query_result
 }
+  get_csv_data <- function(csv_path, pattern) {
+    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_df <- read.csv(fs::path(csv_path, csv_filename))
+    empty_name_cols <- which(colnames(csv_df) == "X")
+    if (length(empty_name_cols) > 0) {
+      csv_df <- csv_df[, -empty_name_cols]
+    } else {
+      csv_df <- csv_df # No empty named columns to remove
+    }
+    csv_df[is.na(csv_df)] <- ''
+    csv_df <- mutate(csv_df, STUDYID = as.character(STUDYID))
+    csv_df
+  }
 
 # GET THE REQUIRED DOMAIN DATA
 if (use_xpt_file) {
@@ -59,13 +72,9 @@ if (use_xpt_file) {
 
 } else {
   # Read data from .csv files
-  mi <- read.csv(fs::path(path, 'mi.csv'))[,-1]
-  mi[is.na(mi)] <- ''
-  mi <- mutate(mi, STUDYID = as.character(STUDYID))
+  mi <- get_csv_data(path, 'mi\\.csv')
 
-  dm <- read.csv(fs::path(path,'dm.csv'))[,-1]
-  dm[is.na(dm)] <- ''
-  dm <- mutate(dm, STUDYID = as.character(STUDYID))
+  dm <- get_csv_data(path,'dm\\.csv')
 }
 
 # Print the dimension of the data frames
@@ -200,6 +209,11 @@ cat("The dimension of 'dm' domain is:", dim(dm), "\n")
     if (all(MIData_cleaned$ARMCD == "VEHICLE" |
             MIData_cleaned$ARMCD == "vehicle" |
             MIData_cleaned$ARMCD == "Vehicle")) {
+      ## DEBUG
+      #write.csv(MIData, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/MIData.csv")
+      #write.csv(tk_recovery_less_MIData, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/tk_recovery_less_MIData.csv")
+      #write.csv(master_compiledata, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_compiledata.csv")
+      #write.csv(MIData_cleaned, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/MIData_cleaned.csv")
       stop("Error: The ARMCD column contains only 'VEHICLE' indicating no
            MI findings are available for score calculation for this STUDYID.")
     }
