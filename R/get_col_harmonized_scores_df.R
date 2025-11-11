@@ -146,7 +146,8 @@ get_col_harmonized_scores_df <- function(liver_score_data_frame,
                        'POSITIVE',
                        'INFLAMMATION',
                        'MICROGRANULOMA',
-                       'PUSTULE')
+                       'PUSTULE',
+                       'HYPERTROPHY')
 
 
   #Data <- column_harmonized_liver_scores
