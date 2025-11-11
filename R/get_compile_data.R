@@ -97,14 +97,14 @@ get_compile_data <- function(studyid = NULL,
   dm <- dm %>%
     dplyr::mutate(ARMCD = dplyr::if_else(grepl('Control', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
   dm <- dm %>%
-    dplyr::mutate(ARMCD = dplyr::if_else(grepl('G1A1', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
+    dplyr::mutate(ARMCD = dplyr::if_else(grepl('G1A1', SETCD, ignore.case = TRUE), 'vehicle', ARMCD))
 
   # TODO: clean this up
   #  Update 'ARMCD' to 'HD' where it originally equals the high-dose exeriment label
   dm <- dm %>%
     dplyr::mutate(ARMCD = dplyr::if_else(grepl('Dose4', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
   dm <- dm %>%
-    dplyr::mutate(ARMCD = dplyr::if_else(grepl('G4A1', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
+    dplyr::mutate(ARMCD = dplyr::if_else(grepl('G4A1', SETCD, ignore.case = TRUE), 'HD', ARMCD))
   dm <- dm %>%
     dplyr::mutate(ARMCD = dplyr::if_else(grepl('High', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
 
@@ -153,14 +153,14 @@ get_compile_data <- function(studyid = NULL,
     dm <- dm %>%
       dplyr::mutate(ARMCD = dplyr::if_else(grepl('Control', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
     dm <- dm %>%
-      dplyr::mutate(ARMCD = dplyr::if_else(grepl('G1A1', ARMCD, ignore.case = TRUE), 'vehicle', ARMCD))
+      dplyr::mutate(ARMCD = dplyr::if_else(grepl('G1A1', SETCD, ignore.case = TRUE), 'vehicle', ARMCD))
 
     # TODO: clean this up
     #  Update 'ARMCD' to 'HD' where it originally equals the high-dose exeriment label
     dm <- dm %>%
       dplyr::mutate(ARMCD = dplyr::if_else(grepl('Dose4', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
     dm <- dm %>%
-      dplyr::mutate(ARMCD = dplyr::if_else(grepl('G4A1', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
+      dplyr::mutate(ARMCD = dplyr::if_else(grepl('G4A1', SETCD, ignore.case = TRUE), 'HD', ARMCD))
     dm <- dm %>%
       dplyr::mutate(ARMCD = dplyr::if_else(grepl('High', ARMCD, ignore.case = TRUE), 'HD', ARMCD))
 
