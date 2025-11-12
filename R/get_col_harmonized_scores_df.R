@@ -61,7 +61,10 @@ get_col_harmonized_scores_df <- function(liver_score_data_frame,
   removeIndex <- which(fn2replace %in% c('STUDYID',
                                          'UNREMARKABLE',
                                          'THIKENING',
-                                         'POSITIVE'))
+                                         'POSITIVE',
+                                         'INFLAMMATION',
+                                         'MICROGRANULOMA',
+                                         'PUSTULE'))
 
   fn2replace <- fn2replace[-removeIndex]
 
@@ -137,7 +140,13 @@ get_col_harmonized_scores_df <- function(liver_score_data_frame,
  # rename the "liver_scores"
   Data <- liver_scores
 
-  removeEndpoints <- c('INFILTRATE', 'UNREMARKABLE', 'THIKENING', 'POSITIVE')
+  removeEndpoints <- c('INFILTRATE',
+                       'UNREMARKABLE',
+                       'THIKENING',
+                       'POSITIVE',
+                       'INFLAMMATION',
+                       'MICROGRANULOMA',
+                       'PUSTULE')
 
 
   #Data <- column_harmonized_liver_scores
