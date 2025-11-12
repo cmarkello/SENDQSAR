@@ -559,8 +559,6 @@ for (studyid in studyid_or_studyids ){
                                stringsAsFactors = FALSE)
     }
     master_error_df <<- rbind(master_error_df, error_block4)
-    ## DEBUG
-    ##write.csv(master_error_df, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/master_error_df.csv")
   })
 
   #<><><><><><><><><><><><><><><><><><>"""MI"""" zscoring <><><><><><><><><><><>

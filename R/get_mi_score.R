@@ -209,11 +209,6 @@ cat("The dimension of 'dm' domain is:", dim(dm), "\n")
     if (all(MIData_cleaned$ARMCD == "VEHICLE" |
             MIData_cleaned$ARMCD == "vehicle" |
             MIData_cleaned$ARMCD == "Vehicle")) {
-      ## DEBUG
-      #write.csv(MIData, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/MIData.csv")
-      #write.csv(tk_recovery_less_MIData, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/tk_recovery_less_MIData.csv")
-      #write.csv(master_compiledata, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_compiledata.csv")
-      #write.csv(MIData_cleaned, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/MIData_cleaned.csv")
       stop("Error: The ARMCD column contains only 'VEHICLE' indicating no
            MI findings are available for score calculation for this STUDYID.")
     }
