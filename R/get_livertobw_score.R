@@ -143,7 +143,7 @@ get_livertobw_score <- function (studyid = NULL,
 
     studyid <- if (use_xpt_file) NULL else studyid
 
-    bwzscore_BW <-  get_bw_score (studyid = studyid ,
+    bwzscore_BW <-  get_bw_score(studyid = studyid ,
                                   path_db = path_db,
                                   fake_study = fake_study,
                                   use_xpt_file = use_xpt_file,
@@ -228,7 +228,6 @@ get_livertobw_score <- function (studyid = NULL,
   }
 
   if (return_individual_scores) {
-
       HD_liver_zscore_df <- HD_liver_zscore %>%
       dplyr::group_by(STUDYID) %>%
       dplyr::mutate(liverToBW_zscore = replace(liverToBW_zscore,

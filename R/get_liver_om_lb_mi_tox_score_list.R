@@ -196,8 +196,6 @@ for (studyid in studyid_or_studyids ){
     }
 
     master_error_df <<- rbind(master_error_df, error_block1)
-      ## DEBUG
-      write.csv(master_error_df, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_error_df.csv")
 
     # Set the flag to FALSE to indicate the first block failed
     first_block_success <<- FALSE
@@ -475,14 +473,8 @@ for (studyid in studyid_or_studyids ){
                                stringsAsFactors = FALSE)
     }
 
-    ## DEBUG
-    write.csv(master_compiledata, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_compiledata.csv")
-    write.csv(bwzscore_BW, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/bwzscore_BW.csv")
-    write.csv(HD_liver_zscore_df, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/HD_liver_zscore_df.csv")
-    write.csv(master_liverToBW, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_liverToBW.csv")
-
     master_error_df <<- rbind(master_error_df, error_block3)
-    write.csv(master_error_df, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_error_df.csv")
+
   })
 
 
@@ -500,8 +492,9 @@ for (studyid in studyid_or_studyids ){
                                      return_individual_scores = TRUE,
                                      return_zscore_by_USUBJID = FALSE)
 
-
+    print("DEBUG flag before master_lb_score_six")
     master_lb_score_six <- rbind(master_lb_score_six , master_lb_scores)
+    print("DEBUG flag after master_lb_score_six")
 
     } else if (output_zscore_by_USUBJID) {
 
@@ -567,7 +560,12 @@ for (studyid in studyid_or_studyids ){
                                #Time = Sys.time(),
                                stringsAsFactors = FALSE)
     }
+    ## DEBUG
+    write.csv(master_compiledata, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_compiledata.csv")
+    write.csv(master_lb_scores, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_lb_scores.csv")
+    write.csv(master_lb_score_six, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_lb_score_six.csv")
     master_error_df <<- rbind(master_error_df, error_block4)
+    write.csv(master_error_df, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_error_df.csv")
   })
 
   #<><><><><><><><><><><><><><><><><><>"""MI"""" zscoring <><><><><><><><><><><>

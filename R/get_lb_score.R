@@ -83,7 +83,6 @@ get_lb_score <- function(studyid = NULL,
   } else {
     # Read data from .csv files
     lb <- get_csv_data(path, 'lb\\.csv')
-    lb <- mutate(lb, LBSTRESN= as.numeric(LBSTRESN))
   }
 
   # Print the dimension of the data frames
@@ -123,11 +122,14 @@ get_lb_score <- function(studyid = NULL,
     # for (Name in unique(filtered_combined_lb$STUDYID)) {
     # Filter the data for the current STUDYID
     study_data_LB <- lb
-    if (nrow(study_data_LB) == 0) {
+
+    if (nrow(study_data_LB) == 0 || all(is.na(study_data_LB$VISITDY))) {
 
       if (return_individual_scores) {
+        print("DEBUG FLAG master_lb_scores")
 
-        master_lb_scores <- data.frame("STUDYID" = studyid, lb_score = "NA")
+        master_lb_scores <- data.frame("STUDYID" = studyid, avg_alb_zscore = NULL, avg_ast_zscore = NULL, avg_alp_zscore = NULL,
+                                    avg_alt_zscore = NULL, avg_bili_zscore = NULL, avg_ggt_zscore = NULL)
 
         return(master_lb_scores)
 
@@ -150,7 +152,7 @@ get_lb_score <- function(studyid = NULL,
 
 
     # Check if LBDY column exists and process accordingly
-    if ("LBDY" %in% names(study_data_LB)) {
+    if ("LBDY" %in% names(study_data_LB) && !(all(is.na(LBD$LBDY)))) {
       LBD <- study_data_LB %>%
         dplyr::filter(LBDY >= 1) %>%
         dplyr::select(STUDYID,USUBJID, LBSPEC, LBTESTCD, LBSTRESN, LBDY)
@@ -176,6 +178,7 @@ get_lb_score <- function(studyid = NULL,
       }
     } else {
       # If LBDY column does not exist, handle accordingly
+
       LBD <- study_data_LB[which(study_data_LB$VISITDY >= 1),
                            c("STUDYID","USUBJID","LBSPEC","LBTESTCD","LBSTRESN", "VISITDY")]
     }
