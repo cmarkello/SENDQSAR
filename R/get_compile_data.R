@@ -51,8 +51,19 @@ get_compile_data <- function(studyid = NULL,
     query_result
   }
 
+  get_input_filename <- function(file_path, pattern) {
+    input_filename <- list.files(file_path, pattern = pattern, ignore.case = TRUE)[1]
+    input_filename
+  }
+
+  get_xpt_data <- function(xpt_path, pattern) {
+    xpt_filename <- get_input_filename(xpt_path, pattern)
+    xpt_df <- haven::read_xpt(fs::path(xpt_path, xpt_filename))
+    xpt_df
+  }
+
   get_csv_data <- function(csv_path, pattern) {
-    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_filename <- get_input_filename(csv_path, pattern)
     csv_df <- read.csv(fs::path(csv_path, csv_filename))
     empty_name_cols <- which(colnames(csv_df) == "X")
     if (length(empty_name_cols) > 0) {
@@ -117,8 +128,8 @@ get_compile_data <- function(studyid = NULL,
 
   } else if (fake_study == TRUE && use_xpt_file == TRUE) {
   # get the required domain
-    dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
-    ts <- haven::read_xpt(fs::path(path,'ts.xpt'))
+    dm <- get_xpt_data(path,'dm\\.xpt')
+    ts <- get_xpt_data(path,'ts\\.xpt')
 
     # Convert 'dm' object to data.table
     data.table::setDT(dm)
@@ -191,14 +202,14 @@ get_compile_data <- function(studyid = NULL,
   } else if (fake_study == FALSE && use_xpt_file == TRUE) {
 
     # get the required domain
-    bw <- haven::read_xpt(fs::path(path,'bw.xpt'))
-    dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
-    ds <- haven::read_xpt(fs::path(path,'ds.xpt'))
-    ts <- haven::read_xpt(fs::path(path,'ts.xpt'))
-    tx <- haven::read_xpt(fs::path(path,'tx.xpt'))
-    pc <- haven::read_xpt(fs::path(path,'pc.xpt'))
-    # pp <- haven::read_xpt(fs::path(path,'pp.xpt'))
-    # pooldef <- haven::read_xpt(fs::path(path,'pooldef.xpt'))
+    bw <- get_xpt_data(path,'bw\\.xpt')
+    dm <- get_xpt_data(path,'dm\\.xpt')
+    ts <- get_xpt_data(path,'ts\\.xpt')
+    ds <- get_xpt_data(path,'ds\\.xpt')
+    tx <- get_xpt_data(path,'tx\\.xpt')
+    pc <- get_xpt_data(path,'pc\\.xpt')
+    # pp <- get_xpt_data(path,'pp\\.xpt')
+    # pooldef <- get_xpt_data(path,'pooldef\\.xpt')
 
   }
 

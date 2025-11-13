@@ -49,8 +49,19 @@ fetch_domain_data <- function(db_connection, domain_name, studyid) {
   query_result <- DBI::dbGetQuery(db_connection, statement = query_statement, params = list(x = studyid))
   query_result
 }
+  get_input_filename <- function(file_path, pattern) {
+    input_filename <- list.files(file_path, pattern = pattern, ignore.case = TRUE)[1]
+    input_filename
+  }
+
+  get_xpt_data <- function(xpt_path, pattern) {
+    xpt_filename <- get_input_filename(xpt_path, pattern)
+    xpt_df <- haven::read_xpt(fs::path(xpt_path, xpt_filename))
+    xpt_df
+  }
+
   get_csv_data <- function(csv_path, pattern) {
-    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_filename <- get_input_filename(csv_path, pattern)
     csv_df <- read.csv(fs::path(csv_path, csv_filename))
     empty_name_cols <- which(colnames(csv_df) == "X")
     if (length(empty_name_cols) > 0) {
@@ -66,9 +77,9 @@ fetch_domain_data <- function(db_connection, domain_name, studyid) {
 # GET THE REQUIRED DOMAIN DATA
 if (use_xpt_file) {
   # Read data from .xpt files
-  mi <- haven::read_xpt(fs::path(path, 'mi.xpt'))
+  mi <- get_xpt_data(path,'mi\\.xpt')
 
-  dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
+  dm <- get_xpt_data(path,'dm\\.xpt')
 
 } else {
   # Read data from .csv files

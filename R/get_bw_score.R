@@ -64,8 +64,19 @@ get_bw_score <- function(studyid = NULL,
     query_result
   }
 
+  get_input_filename <- function(file_path, pattern) {
+    input_filename <- list.files(file_path, pattern = pattern, ignore.case = TRUE)[1]
+    input_filename
+  }
+
+  get_xpt_data <- function(xpt_path, pattern) {
+    xpt_filename <- get_input_filename(xpt_path, pattern)
+    xpt_df <- haven::read_xpt(fs::path(xpt_path, xpt_filename))
+    xpt_df
+  }
+
   get_csv_data <- function(csv_path, pattern) {
-    csv_filename <- list.files(csv_path, pattern = pattern, ignore.case = TRUE)[1]
+    csv_filename <- get_input_filename(csv_path, pattern)
     csv_df <- read.csv(fs::path(csv_path, csv_filename))
     empty_name_cols <- which(colnames(csv_df) == "X")
     if (length(empty_name_cols) > 0) {
@@ -80,10 +91,12 @@ get_bw_score <- function(studyid = NULL,
 
   if (use_xpt_file) {
     # Read data from .xpt files
-    bw <- haven::read_xpt(fs::path(path, 'bw.xpt'))
+    bw <- get_xpt_data(path,'bw\\.xpt')
   } else {
     # Read data from .csv files
     bw <- get_csv_data(path, 'bw\\.csv')
+    ## DEBUG
+    write.csv(bw, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/bw.csv")
   }
 
   # Print the dimension of the data frames
@@ -128,6 +141,8 @@ if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
      if (TRUE){
       # Get unique USUBJIDs in the current study
       unique_subjids <- unique(bw$USUBJID)
+      ## DEBUG
+      write.csv(unique_subjids, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/unique_subjids.csv")
 
       for (currentUSUBJID in unique_subjids) {
 
@@ -136,18 +151,26 @@ if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
 
         # Data (all rows) for the current USUBJID
         subj_data <- bw[which(bw$USUBJID == currentUSUBJID), ]
+        ## DEBUG
+        write.csv(subj_data, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/subj_data1.csv")
 
         # for any row if  VISITDY column data is empty replace it with the corresponding values from BWDY column
         subj_data <- subj_data %>% dplyr::mutate(VISITDY = ifelse(is.na(VISITDY) | VISITDY == "", BWDY, VISITDY))
+        ## DEBUG
+        write.csv(subj_data, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/subj_data2.csv")
 
         # 1. Check if VISITDY == 1 is present
         SubjectInitialWeight <- subj_data[subj_data$VISITDY == 1,
                                           c("STUDYID", "USUBJID", "BWSTRESN", "VISITDY")]
+        ## DEBUG
+        write.csv(SubjectInitialWeight, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/SubjectInitialWeight1.csv")
 
 
         # 2. If no initial weight with VISITDY == 1,  try VISITDY < 0
         if (nrow(SubjectInitialWeight) == 0) {
           negative_visits <- subj_data[subj_data$VISITDY < 0, ]
+          ## DEBUG
+          write.csv(negative_visits, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/negative_visits.csv")
           if (nrow(negative_visits) > 0) {
             closest_row <- which.min(abs(negative_visits$VISITDY))
             SubjectInitialWeight <- negative_visits[closest_row, c("STUDYID", "USUBJID", "BWSTRESN", "VISITDY")]
@@ -157,6 +180,8 @@ if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
         # 3. If no initial weight with VISITDY == 1 VISITDY < 0 , try 1<VISITDY<=5
         if (nrow(SubjectInitialWeight) == 0) {
           five_visitdy <- subj_data[subj_data$VISITDY > 1 & subj_data$VISITDY <= 5, ]
+          ## DEBUG
+          write.csv(five_visitdy, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/five_visitdy.csv")
 
           if (nrow(five_visitdy) > 0) {
             # If there are rows where 1 < VISITDY <= 5, choose the one with the minimum VISITDY value
@@ -168,6 +193,8 @@ if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
         # 4. If no rows, if VISITDY  >5 , set BWSTRESN value 0
         if (nrow(SubjectInitialWeight) == 0) {
           null_visitdy_large_bw <- subj_data[subj_data$VISITDY > 5, ]
+          ## DEBUG
+          write.csv(null_visitdy_large_bw, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/null_visitdy_large_bw.csv")
 
           if (nrow(null_visitdy_large_bw) > 0) {
             # Set BWSTRESN to 0 for the rows that meet the condition
@@ -184,6 +211,8 @@ if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
           UnmatchedUSUBJIDs <- rbind(UnmatchedUSUBJIDs, data.frame(USUBJID = currentUSUBJID, stringsAsFactors = FALSE))
         }
         # Store Values to "StudyInitialWeights" data frame
+        ## DEBUG
+        write.csv(SubjectInitialWeight, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/SubjectInitialWeight2.csv")
         StudyInitialWeights <- rbind(StudyInitialWeights,SubjectInitialWeight)
       }
    }

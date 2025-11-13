@@ -40,30 +40,47 @@ get_treatment_group_amin <- function(studyid = NULL,
     query_result
   }
 
+  get_input_filename <- function(file_path, pattern) {
+    input_filename <- list.files(file_path, pattern = pattern, ignore.case = TRUE)[1]
+    input_filename
+  }
+
+  get_xpt_data <- function(xpt_path, pattern) {
+    xpt_filename <- get_input_filename(xpt_path, pattern)
+    xpt_df <- haven::read_xpt(fs::path(xpt_path, xpt_filename))
+    xpt_df
+  }
+
+  get_csv_data <- function(csv_path, pattern) {
+    csv_filename <- get_input_filename(csv_path, pattern)
+    csv_df <- read.csv(fs::path(csv_path, csv_filename))
+    empty_name_cols <- which(colnames(csv_df) == "X")
+    if (length(empty_name_cols) > 0) {
+      csv_df <- csv_df[, -empty_name_cols]
+    } else {
+      csv_df <- csv_df # No empty named columns to remove
+    }
+    csv_df[is.na(csv_df)] <- ''
+    csv_df <- mutate(csv_df, STUDYID = as.character(STUDYID))
+    csv_df
+  }
+
   # GET THE REQUIRED DOMAIN DATA
   if (use_xpt_file) {
     # Read data from .xpt files
-    dm <- haven::read_xpt(fs::path(path,'dm.xpt'))
-    tx <- haven::read_xpt(fs::path(path,'tx.xpt'))
-    ts <- haven::read_xpt(fs::path(path,'ts.xpt'))
-    ds <- haven::read_xpt(fs::path(path,'ds.xpt'))
-    pc <- haven::read_xpt(fs::path(path,'pc.xpt'))
+    dm <- get_xpt_data(path,'dm\\.xpt')
+    tx <- get_xpt_data(path,'tx\\.xpt')
+    ts <- get_xpt_data(path,'ts\\.xpt')
+    ds <- get_xpt_data(path,'ds\\.xpt')
+    pc <- get_xpt_data(path,'pc\\.xpt')
 
   } else {
-    # Establish a connection to the SQLite database
-    db_connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = path)
-
-    # Fetch data for required domains
-    tx <- fetch_domain_data(db_connection, 'tx', studyid)
-    ts <- fetch_domain_data(db_connection, 'ts', studyid)
-    ds <- fetch_domain_data(db_connection, 'ds', studyid)
-    dm <- fetch_domain_data(db_connection, 'dm', studyid)
-    pc <- fetch_domain_data(db_connection, 'pc', studyid)
-    #pp <- fetch_domain_data(db_connection, 'pp', studyid)
-    #pooldef <- fetch_domain_data(db_connection, 'pooldef', studyid)
-
-    # Close the database connection
-    DBI::dbDisconnect(db_connection)
+    # Read data from .csv files
+    dm <- get_csv_data(path,'dm\\.csv')
+    tx <- get_csv_data(path,'tx\\.csv')
+    ts <- get_csv_data(path,'ts\\.csv')
+    ds <- get_csv_data(path,'ds\\.csv')
+    pc <- get_csv_data(path,'pc\\.csv')
   }
 
   # Identify unique treatment groups (SETCD) from DM
