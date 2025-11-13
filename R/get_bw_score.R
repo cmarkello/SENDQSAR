@@ -106,12 +106,12 @@ get_bw_score <- function(studyid = NULL,
 
 
 # Check if both BWDY and VISITDY columns exist in the 'bw' data frame
-if (!("BWDY" %in% colnames(bw)) && !("VISITDY" %in% colnames(bw))) {
+if (!("BWDY" %in% colnames(bw)) || !("VISITDY" %in% colnames(bw))) {
   stop("Both 'BWDY' and 'VISITDY' columns are absent in the 'bw' data frame.")
-} else if ("BWDY" %in% colnames(bw) && !("VISITDY" %in% colnames(bw)) && !(all(is.na(bw$BWDY)))) {
+} else if ("BWDY" %in% colnames(bw) && !("VISITDY" %in% colnames(bw)) || !(all(is.na(bw$BWDY)))) {
   # If BWDY is present and VISITDY is absent, create VISITDY with the values of BWDY
   bw$VISITDY <- bw$BWDY
-} else if (!("BWDY" %in% colnames(bw)) && "VISITDY" %in% colnames(bw) && !(all(is.na(bw$VISITDY)))) {
+} else if (!("BWDY" %in% colnames(bw)) && "VISITDY" %in% colnames(bw) || !(all(is.na(bw$VISITDY)))) {
   # If VISITDY is present and BWDY is absent, create BWDY with the values of VISITDY
   bw$BWDY <- bw$VISITDY
 } else if ("BWNOMDY" %in% colnames(bw) && !(all(is.na(bw$BWNOMDY))) && all(is.na(bw$VISITDY)) && all(is.na(bw$BWDY))) {
