@@ -127,7 +127,6 @@ get_lb_score <- function(studyid = NULL,
     if (nrow(study_data_LB) == 0) {
 
       if (return_individual_scores) {
-        print("DEBUG FLAG master_lb_scores")
 
         master_lb_scores <- data.frame("STUDYID" = studyid, lb_score = "NA")
 

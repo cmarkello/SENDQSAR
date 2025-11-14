@@ -65,7 +65,6 @@ get_liver_om_lb_mi_tox_score_list <- function (studyid_or_studyids = FALSE,
 if(output_individual_scores ) {
 
   # master bwzscore
-  print('DEBUG FLAG1')
 
   # master liverToBW_df
   master_liverToBW <-  data.frame(STUDYID = NULL, avg_liverToBW_zscore = NULL)
@@ -492,9 +491,7 @@ for (studyid in studyid_or_studyids ){
                                      return_individual_scores = TRUE,
                                      return_zscore_by_USUBJID = FALSE)
 
-    print("DEBUG flag before master_lb_score_six")
     master_lb_score_six <- rbind(master_lb_score_six , master_lb_scores)
-    print("DEBUG flag after master_lb_score_six")
 
     } else if (output_zscore_by_USUBJID) {
 
@@ -560,12 +557,7 @@ for (studyid in studyid_or_studyids ){
                                #Time = Sys.time(),
                                stringsAsFactors = FALSE)
     }
-    ## DEBUG
-    write.csv(master_compiledata, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_compiledata.csv")
-    write.csv(master_lb_scores, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_lb_scores.csv")
-    write.csv(master_lb_score_six, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_lb_score_six.csv")
     master_error_df <<- rbind(master_error_df, error_block4)
-    write.csv(master_error_df, "/home/cjmarkello/precisionFDAassetts/Predictive_Modeling_of_Hepatotoxicity/debug_output/master_error_df.csv")
   })
 
   #<><><><><><><><><><><><><><><><><><>"""MI"""" zscoring <><><><><><><><><><><>
